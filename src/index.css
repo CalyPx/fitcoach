@@ -3,34 +3,37 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* Color tokens — deep indigo-black stage with a warm marigold lead
-     and a teal supporting color reserved for secondary metrics. */
-  --color-bg: #10131c;
-  --color-bg-elevated: #1a1f2e;
-  --color-bg-subtle: #232940;
-  --color-border: #2a3150;
+  /* Color tokens — charcoal stage with a single emerald accent family.
+     One hue, two depths: a saturated emerald for the one deliberate "go"
+     color, and a lighter emerald for secondary/supporting readouts —
+     keeps the palette coherent instead of reaching for unrelated hues. */
+  --color-bg: #14181a;
+  --color-bg-elevated: #1c2224;
+  --color-bg-subtle: #242b2d;
+  --color-border: #303839;
 
-  --color-fg: #f3efe6;
+  --color-fg: #eef1f0;
   /* Tailwind v4's @theme parser can't resolve color-mix() referencing a
      sibling var() here — it silently drops every token declared after the
      unresolvable one. Literal rgba() values only inside this block. */
-  --color-fg-muted: rgba(243, 239, 230, 0.68);
-  --color-fg-subtle: rgba(243, 239, 230, 0.42);
+  --color-fg-muted: rgba(238, 241, 240, 0.68);
+  --color-fg-subtle: rgba(238, 241, 240, 0.42);
 
-  /* Primary accent — marigold. The one deliberate "go" color: CTAs, the
-     day's progress ring, the current step on the roadmap. */
-  --color-accent: #ff9d4d;
-  --color-accent-fg: #241505;
-  --color-accent-muted: rgba(255, 157, 77, 0.16);
+  /* Primary accent — emerald. CTAs, the day's progress ring, the current
+     step on the roadmap. */
+  --color-accent: #10b981;
+  --color-accent-fg: #072318;
+  --color-accent-muted: rgba(16, 185, 129, 0.16);
 
-  /* Secondary accent — teal. Reserved for secondary readouts (protein,
-     streaks) so the marigold doesn't get diluted into a generic theme color. */
-  --color-accent-secondary: #3ecfc4;
-  --color-accent-secondary-fg: #062420;
-  --color-accent-secondary-muted: rgba(62, 207, 196, 0.16);
+  /* Secondary accent — a lighter emerald. Reserved for secondary readouts
+     (protein, streaks) — same family as the primary, just lifted, so
+     nothing competes with it as a second "brand" color. */
+  --color-accent-secondary: #6ee7b7;
+  --color-accent-secondary-fg: #082a1d;
+  --color-accent-secondary-muted: rgba(110, 231, 183, 0.16);
 
-  --color-danger: #e5484d;
-  --color-warning: #e8a23d;
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
 
   /* Spacing uses Tailwind's default numeric scale (p-1, gap-6, etc.) —
      named keys here (sm/md/lg/xl/2xl) would collide with the built-in

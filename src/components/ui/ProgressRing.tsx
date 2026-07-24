@@ -19,13 +19,13 @@ interface ProgressRingProps {
 const TONE_STYLES = {
   primary: {
     stroke: 'stroke-accent',
-    glow: 'drop-shadow-[0_0_6px_rgba(255,157,77,0.6)]',
-    ambient: 'rgba(255,157,77,0.35)',
+    glow: 'drop-shadow-[0_0_6px_rgba(16,185,129,0.6)]',
+    ambient: 'rgba(16,185,129,0.35)',
   },
   secondary: {
     stroke: 'stroke-accent-secondary',
-    glow: 'drop-shadow-[0_0_6px_rgba(62,207,196,0.6)]',
-    ambient: 'rgba(62,207,196,0.35)',
+    glow: 'drop-shadow-[0_0_6px_rgba(110,231,183,0.6)]',
+    ambient: 'rgba(110,231,183,0.35)',
   },
 } as const
 

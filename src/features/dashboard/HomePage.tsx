@@ -1,7 +1,6 @@
 import { Link, Navigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Card } from '@/components/ui/Card'
-import { Button } from '@/components/ui/Button'
 import { ProgressRing } from '@/components/ui/ProgressRing'
 import { useAppStore } from '@/lib/store'
 import {
@@ -71,12 +70,17 @@ export function HomePage() {
           </h1>
           <p className="mt-1 text-fg-muted">{dateLabel}</p>
         </div>
-        {streak > 0 && (
-          <div className="flex items-center gap-1.5 rounded-full border border-accent-secondary/25 bg-accent-secondary-muted px-3 py-1.5 text-sm text-accent-secondary">
-            <span aria-label={`${streak}-day streak`}>🔥</span>
-            <span className="font-display text-display-sm">{streak}</span>
-          </div>
-        )}
+        <div className="flex flex-col items-end gap-2">
+          {streak > 0 && (
+            <div className="flex items-center gap-1.5 rounded-full border border-accent-secondary/25 bg-accent-secondary-muted px-3 py-1.5 text-sm text-accent-secondary">
+              <span aria-label={`${streak}-day streak`}>🔥</span>
+              <span className="font-display text-display-sm">{streak}</span>
+            </div>
+          )}
+          <Link to="/onboarding" className="text-xs text-fg-subtle hover:text-fg-muted">
+            Edit profile
+          </Link>
+        </div>
       </motion.header>
 
       <motion.div
@@ -139,24 +143,6 @@ export function HomePage() {
               <p className="text-sm text-fg-subtle">Tap to log a meal</p>
             </div>
           </Card>
-        </Link>
-      </motion.div>
-
-      <motion.div
-        className="flex flex-col gap-2"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.4, delay: 0.15 }}
-      >
-        <Link to="/dashboard">
-          <Button variant="secondary" className="w-full">
-            View dashboard
-          </Button>
-        </Link>
-        <Link to="/onboarding">
-          <Button variant="ghost" size="sm" className="w-full">
-            Redo onboarding
-          </Button>
         </Link>
       </motion.div>
     </div>

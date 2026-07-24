@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { ProgressRing } from '@/components/ui/ProgressRing'
 import { cn } from '@/lib/utils'
@@ -81,19 +80,6 @@ export function DashboardPage() {
           </Card>
         </Link>
       </motion.div>
-
-      <div className="flex flex-col gap-2">
-        <Link to="/roadmap">
-          <Button variant="secondary" className="w-full">
-            View your roadmap
-          </Button>
-        </Link>
-        <Link to="/home">
-          <Button variant="ghost" size="sm" className="w-full">
-            Back to home
-          </Button>
-        </Link>
-      </div>
     </div>
   )
 }

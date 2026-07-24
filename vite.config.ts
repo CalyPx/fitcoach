@@ -16,8 +16,8 @@ export default defineConfig({
         name: 'FitCoach',
         short_name: 'FitCoach',
         description: 'AI fitness coach for Nepali households',
-        theme_color: '#0b0f0e',
-        background_color: '#0b0f0e',
+        theme_color: '#14181a',
+        background_color: '#14181a',
         display: 'standalone',
         start_url: '/',
         icons: [

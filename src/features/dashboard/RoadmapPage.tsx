@@ -161,7 +161,7 @@ function Peak({ point, state }: { point: { x: number; y: number }; state: 'compl
   return (
     <path
       d={d}
-      className={cn('stroke-none', state === 'current' ? 'fill-accent drop-shadow-[0_0_10px_rgba(255,157,77,0.65)]' : 'fill-accent/70')}
+      className={cn('stroke-none', state === 'current' ? 'fill-accent drop-shadow-[0_0_10px_rgba(16,185,129,0.65)]' : 'fill-accent/70')}
     />
   )
 }
