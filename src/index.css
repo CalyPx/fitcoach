@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Color tokens — Apple-calm, dark-first */
+  --color-bg: #0b0f0e;
+  --color-bg-elevated: #141917;
+  --color-bg-subtle: #1b211f;
+  --color-border: #262d2b;
+
+  --color-fg: #f2f4f3;
+  --color-fg-muted: #9ba3a0;
+  --color-fg-subtle: #6b726f;
+
+  --color-accent: #3ddc84;
+  --color-accent-fg: #06180f;
+  --color-accent-muted: #1f4834;
+
+  --color-danger: #e5484d;
+  --color-warning: #e8a23d;
+
+  /* Spacing uses Tailwind's default numeric scale (p-1, gap-6, etc.) —
+     named keys here (sm/md/lg/xl/2xl) would collide with the built-in
+     container scale that max-w-* reads from and silently break it. */
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --radius-full: 9999px;
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+html {
+  color-scheme: dark;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-bg text-fg font-sans antialiased;
+  margin: 0;
+}
+
+#root {
+  min-height: 100dvh;
+}
+
+/* Default browser focus rings (often blue) clash with the dark theme —
+   give every interactive element a consistent accent-colored ring instead.
+   Elements that already style focus explicitly (inputs use a border-color
+   change) just get this as a secondary, non-clashing cue. */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
