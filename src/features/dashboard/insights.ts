@@ -1,4 +1,4 @@
-import type { Goal, WorkoutSession } from '@/types'
+import type { Goal, MealEntry, NutritionEstimate, WorkoutSession } from '@/types'
 import { EXERCISES, type ExerciseConfig } from '@/features/pose-detection/exercises'
 
 /** Local YYYY-MM-DD — deliberately not UTC, so "today" matches the user's wall clock. */
@@ -100,4 +100,34 @@ export function proteinTargetGrams(goal: Goal): number {
     case 'general-fitness':
       return 100
   }
+}
+
+/** Rough daily calorie target — same goal-shaped ballpark approach as proteinTargetGrams. */
+export function calorieTargetKcal(goal: Goal): number {
+  switch (goal) {
+    case 'build-muscle':
+      return 2400
+    case 'lose-fat':
+      return 1800
+    case 'fix-posture':
+      return 2000
+    case 'general-fitness':
+      return 2100
+  }
+}
+
+export function mealsOnDay(meals: MealEntry[], key: string): MealEntry[] {
+  return meals.filter((m) => m.dateKey === key)
+}
+
+export function dailyNutritionTotals(meals: MealEntry[], key: string): NutritionEstimate {
+  return mealsOnDay(meals, key).reduce<NutritionEstimate>(
+    (sum, m) => ({
+      calories: sum.calories + m.estimate.calories,
+      proteinG: sum.proteinG + m.estimate.proteinG,
+      carbsG: sum.carbsG + m.estimate.carbsG,
+      fatG: sum.fatG + m.estimate.fatG,
+    }),
+    { calories: 0, proteinG: 0, carbsG: 0, fatG: 0 },
+  )
 }

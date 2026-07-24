@@ -1,15 +1,18 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { UserProfile, WorkoutSession } from '@/types'
+import type { MealEntry, UserProfile, WorkoutSession } from '@/types'
 
 interface AppState {
   profile: UserProfile | null
   sessions: WorkoutSession[]
   /** Date key (YYYY-MM-DD, local time) -> grams of protein logged that day. */
   proteinLogs: Record<string, number>
+  meals: MealEntry[]
   setProfile: (profile: UserProfile) => void
   addSession: (session: WorkoutSession) => void
   addProtein: (dateKey: string, grams: number) => void
+  addMeal: (meal: MealEntry) => void
+  deleteMeal: (id: string) => void
   reset: () => void
 }
 
@@ -19,6 +22,7 @@ export const useAppStore = create<AppState>()(
       profile: null,
       sessions: [],
       proteinLogs: {},
+      meals: [],
       setProfile: (profile) => set({ profile }),
       addSession: (session) =>
         set((state) => ({ sessions: [...state.sessions, session] })),
@@ -29,7 +33,10 @@ export const useAppStore = create<AppState>()(
             [dateKey]: (state.proteinLogs[dateKey] ?? 0) + grams,
           },
         })),
-      reset: () => set({ profile: null, sessions: [], proteinLogs: {} }),
+      addMeal: (meal) => set((state) => ({ meals: [...state.meals, meal] })),
+      deleteMeal: (id) =>
+        set((state) => ({ meals: state.meals.filter((m) => m.id !== id) })),
+      reset: () => set({ profile: null, sessions: [], proteinLogs: {}, meals: [] }),
     }),
     { name: 'fitcoach-storage' },
   ),

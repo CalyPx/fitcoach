@@ -5,7 +5,9 @@ import { Button } from '@/components/ui/Button'
 import { ProgressRing } from '@/components/ui/ProgressRing'
 import { useAppStore } from '@/lib/store'
 import {
+  calorieTargetKcal,
   computeStreak,
+  dailyNutritionTotals,
   recommendExercise,
   sessionsOnDay,
   todayKey,
@@ -23,6 +25,7 @@ function getGreeting(date: Date): string {
 export function HomePage() {
   const profile = useAppStore((s) => s.profile)
   const sessions = useAppStore((s) => s.sessions)
+  const meals = useAppStore((s) => s.meals)
 
   if (!profile || !profile.onboarded) {
     return <Navigate to="/onboarding" replace />
@@ -45,6 +48,10 @@ export function HomePage() {
   const dailyTargetSets = nextExercise.targetSets
   const ringProgress = dailyTargetSets > 0 ? setsToday / dailyTargetSets : 0
 
+  const nutritionToday = dailyNutritionTotals(meals, todayKey(now))
+  const calorieTarget = calorieTargetKcal(profile.goal)
+  const calorieProgress = calorieTarget > 0 ? nutritionToday.calories / calorieTarget : 0
+
   const workoutTarget =
     nextExercise.mode === 'rep'
       ? `${nextExercise.targetSets} sets × ${nextExercise.targetReps} reps`
@@ -66,7 +73,7 @@ export function HomePage() {
         </div>
         {streak > 0 && (
           <div className="flex items-center gap-1.5 rounded-full border border-accent-secondary/25 bg-accent-secondary-muted px-3 py-1.5 text-sm text-accent-secondary">
-            <span>🔥</span>
+            <span aria-label={`${streak}-day streak`}>🔥</span>
             <span className="font-display text-display-sm">{streak}</span>
           </div>
         )}
@@ -106,6 +113,31 @@ export function HomePage() {
               <p className="mt-1 text-fg-muted">{workoutTarget}</p>
             </div>
             <p className="text-sm text-fg-subtle">{nextExercise.cues[0]}</p>
+          </Card>
+        </Link>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.12, ease: 'easeOut' }}
+      >
+        <Link to="/meals">
+          <Card interactive className="flex items-center gap-4">
+            <ProgressRing
+              progress={calorieProgress}
+              size={64}
+              strokeWidth={6}
+              label={`${Math.round(nutritionToday.calories)}`}
+              tone="secondary"
+            />
+            <div className="flex-1">
+              <p className="text-xs uppercase tracking-wide text-fg-subtle">Nutrition today</p>
+              <p className="mt-1 font-medium text-fg">
+                {Math.round(nutritionToday.proteinG)}g protein · {Math.round(nutritionToday.calories)} kcal
+              </p>
+              <p className="text-sm text-fg-subtle">Tap to log a meal</p>
+            </div>
           </Card>
         </Link>
       </motion.div>

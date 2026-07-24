@@ -28,19 +28,21 @@ export function RestTimer({ seconds, nextSetLabel, onComplete, onSkip }: RestTim
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-md flex-col items-center justify-center gap-6 p-6 text-center">
-      <p className="text-fg-muted">Rest up</p>
-      <ProgressRing
-        progress={1 - remaining / seconds}
-        size={140}
-        strokeWidth={8}
-        label={String(remaining)}
-        ease="linear"
-        durationSeconds={0.95}
-      />
-      <p className="text-fg-muted">Next: {nextSetLabel}</p>
-      <Button variant="secondary" onClick={onSkip}>
-        Skip rest
-      </Button>
+      <div className="flex flex-col items-center gap-6 rounded-2xl border border-white/10 bg-bg-elevated/70 p-8 backdrop-blur-md">
+        <p className="text-fg-muted">Rest up</p>
+        <ProgressRing
+          progress={1 - remaining / seconds}
+          size={140}
+          strokeWidth={8}
+          label={String(remaining)}
+          ease="linear"
+          durationSeconds={0.95}
+        />
+        <p className="text-fg-muted">Next: {nextSetLabel}</p>
+        <Button variant="secondary" onClick={onSkip}>
+          Skip rest
+        </Button>
+      </div>
     </div>
   )
 }

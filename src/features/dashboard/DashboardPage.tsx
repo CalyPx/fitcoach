@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/Button'
@@ -8,6 +7,7 @@ import { cn } from '@/lib/utils'
 import { useAppStore } from '@/lib/store'
 import type { WorkoutSession } from '@/types'
 import {
+  dailyNutritionTotals,
   lastNDayKeys,
   parseDateKey,
   proteinTargetGrams,
@@ -22,10 +22,7 @@ const WEEKDAY_LABELS = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
 export function DashboardPage() {
   const profile = useAppStore((s) => s.profile)
   const sessions = useAppStore((s) => s.sessions)
-  const proteinLogs = useAppStore((s) => s.proteinLogs)
-  const addProtein = useAppStore((s) => s.addProtein)
-
-  const [proteinInput, setProteinInput] = useState('')
+  const meals = useAppStore((s) => s.meals)
 
   const now = new Date()
   const dayKeys = lastNDayKeys(7, now)
@@ -35,16 +32,9 @@ export function DashboardPage() {
   const weekReps = totalReps(weekSessions)
   const weekSessionCount = weekSessions.length
 
-  const proteinToday = proteinLogs[today] ?? 0
+  const proteinToday = dailyNutritionTotals(meals, today).proteinG
   const proteinTarget = profile ? proteinTargetGrams(profile.goal) : 100
   const proteinProgress = proteinTarget > 0 ? proteinToday / proteinTarget : 0
-
-  const handleLogProtein = () => {
-    const grams = Number(proteinInput)
-    if (!Number.isFinite(grams) || grams <= 0) return
-    addProtein(today, Math.round(grams))
-    setProteinInput('')
-  }
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-md flex-col gap-6 p-6">
@@ -71,37 +61,25 @@ export function DashboardPage() {
       </motion.div>
 
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.15 }}>
-        <Card className="flex flex-col gap-4">
-          <div className="flex items-center justify-between">
-            <p className="text-xs uppercase tracking-wide text-fg-subtle">Protein today</p>
-            <span className="text-sm text-fg-muted">Target: {proteinTarget}g</span>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <ProgressRing
-              progress={proteinProgress}
-              size={72}
-              strokeWidth={7}
-              label={`${proteinToday}g`}
-              tone="secondary"
-            />
-            <div className="flex flex-1 items-center gap-2">
-              <input
-                type="number"
-                inputMode="numeric"
-                min={0}
-                value={proteinInput}
-                onChange={(e) => setProteinInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleLogProtein()}
-                placeholder="grams"
-                className="w-full rounded-md border border-border bg-bg-subtle px-3 py-2 text-fg placeholder:text-fg-subtle outline-none focus:border-accent"
-              />
-              <Button size="sm" onClick={handleLogProtein}>
-                Log
-              </Button>
+        <Link to="/meals">
+          <Card interactive className="flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <p className="text-xs uppercase tracking-wide text-fg-subtle">Protein today</p>
+              <span className="text-sm text-fg-muted">Target: {proteinTarget}g</span>
             </div>
-          </div>
-        </Card>
+
+            <div className="flex items-center gap-4">
+              <ProgressRing
+                progress={proteinProgress}
+                size={72}
+                strokeWidth={7}
+                label={`${Math.round(proteinToday)}g`}
+                tone="secondary"
+              />
+              <p className="flex-1 text-sm text-fg-muted">Log meals in the Meals tab to track this →</p>
+            </div>
+          </Card>
+        </Link>
       </motion.div>
 
       <div className="flex flex-col gap-2">

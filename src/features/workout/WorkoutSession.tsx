@@ -128,9 +128,9 @@ export function WorkoutSession({ exercise }: WorkoutSessionProps) {
   } else {
     const target = exercise.mode === 'rep' ? `Target: ${exercise.targetReps} reps` : `Target: ${exercise.targetHoldSeconds}s`
     content = (
-      <div className="mx-auto flex min-h-dvh max-w-2xl flex-col gap-4 p-6">
-        <div className="flex items-center justify-between">
-          <h1 className="text-xl font-semibold text-fg">{exercise.name}</h1>
+      <div className="mx-auto flex h-dvh max-w-2xl flex-col gap-3 p-3">
+        <div className="flex items-center justify-between px-1">
+          <h1 className="text-lg font-semibold text-fg">{exercise.name}</h1>
           <span className="text-sm text-fg-muted">
             Set {setIndex + 1} of {exercise.targetSets} · {target}
           </span>

@@ -189,59 +189,60 @@ export function PoseDetector({ exercise, onMetricUpdate }: PoseDetectorProps) {
   }, [landmarker, cameraStatus, exercise])
 
   return (
-    <div className="flex flex-col gap-4">
-      <div
-        className="relative w-full max-h-[70dvh] overflow-hidden rounded-lg border border-border bg-bg-elevated"
-        style={{ aspectRatio: videoAspect }}
-      >
-        <video
-          ref={videoRef}
-          className="absolute inset-0 h-full w-full -scale-x-100 object-cover"
-          playsInline
-          muted
-        />
-        <canvas
-          ref={canvasRef}
-          className="absolute inset-0 h-full w-full -scale-x-100 object-cover"
-        />
+    <div
+      className="relative w-full flex-1 overflow-hidden rounded-2xl border border-border bg-bg-elevated"
+      style={{ aspectRatio: videoAspect }}
+    >
+      <video
+        ref={videoRef}
+        className="absolute inset-0 h-full w-full -scale-x-100 object-cover"
+        playsInline
+        muted
+      />
+      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full -scale-x-100 object-cover" />
 
-        {(cameraStatus !== 'ready' || modelLoading || modelError) && (
-          <div className="absolute inset-0 flex items-center justify-center bg-bg/90 p-6 text-center">
-            <StatusMessage
-              cameraStatus={cameraStatus}
-              modelLoading={modelLoading}
-              modelError={modelError}
-              onRetryModel={retryModel}
-            />
-          </div>
-        )}
-
-        {cameraStatus === 'ready' && !modelLoading && !modelError && !poseVisible && (
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-bg/80 px-4 py-1.5 text-sm text-fg-muted">
-            No person detected — step into frame
-          </div>
-        )}
-
-        <div className="absolute right-4 top-4 rounded-full bg-bg/80 px-3 py-1 text-xs text-fg-muted">
-          {fps} fps
-        </div>
-      </div>
-
-      {exercise.mode === 'rep' ? (
-        <div className="grid grid-cols-3 gap-3">
-          <StatTile label="Reps" value={String(reps)} />
-          <StatTile label="Phase" value={phase} />
-          <StatTile label={exercise.primaryAngle.label} value={angle ? `${Math.round(angle)}°` : '—'} />
-        </div>
-      ) : (
-        <div className="grid grid-cols-2 gap-3">
-          <StatTile label="Hold time" value={formatSeconds(elapsedGoodSeconds)} />
-          <StatTile label="Form" value={holding ? 'Good' : 'Adjust'} />
+      {/* Top feedback caption — glass HUD bar so the eye never leaves the camera mid-set. */}
+      {cameraStatus === 'ready' && !modelLoading && !modelError && feedback && (
+        <div className="absolute inset-x-3 top-3 rounded-xl border border-white/10 bg-bg/70 px-4 py-3 text-center backdrop-blur-md">
+          <p className="text-base font-medium text-fg">{feedback}</p>
         </div>
       )}
 
-      <div className="rounded-lg border border-border bg-bg-elevated p-4 text-center">
-        <p className="text-lg font-medium text-fg">{feedback}</p>
+      {(cameraStatus !== 'ready' || modelLoading || modelError) && (
+        <div className="absolute inset-0 flex items-center justify-center bg-bg/90 p-6 text-center">
+          <StatusMessage
+            cameraStatus={cameraStatus}
+            modelLoading={modelLoading}
+            modelError={modelError}
+            onRetryModel={retryModel}
+          />
+        </div>
+      )}
+
+      {cameraStatus === 'ready' && !modelLoading && !modelError && !poseVisible && (
+        <div className="absolute bottom-28 left-1/2 -translate-x-1/2 rounded-full border border-white/10 bg-bg/80 px-4 py-1.5 text-sm text-fg-muted backdrop-blur-md">
+          No person detected — step into frame
+        </div>
+      )}
+
+      <div className="absolute right-3 top-3 rounded-full border border-white/10 bg-bg/70 px-3 py-1 text-xs text-fg-muted backdrop-blur-md">
+        {fps} fps
+      </div>
+
+      {/* Bottom stat chips — floating over the video instead of separate cards below it. */}
+      <div className="absolute inset-x-3 bottom-3 flex gap-2">
+        {exercise.mode === 'rep' ? (
+          <>
+            <HudChip label="Reps" value={String(reps)} />
+            <HudChip label="Phase" value={phase} />
+            <HudChip label={exercise.primaryAngle.label} value={angle ? `${Math.round(angle)}°` : '—'} />
+          </>
+        ) : (
+          <>
+            <HudChip label="Hold time" value={formatSeconds(elapsedGoodSeconds)} className="flex-[1.2]" />
+            <HudChip label="Form" value={holding ? 'Good' : 'Adjust'} />
+          </>
+        )}
       </div>
     </div>
   )
@@ -254,11 +255,13 @@ function formatSeconds(totalSeconds: number): string {
   return `${m}:${String(r).padStart(2, '0')}`
 }
 
-function StatTile({ label, value }: { label: string; value: string }) {
+function HudChip({ label, value, className }: { label: string; value: string; className?: string }) {
   return (
-    <div className="rounded-lg border border-border bg-bg-elevated p-3 text-center">
-      <p className="text-xs uppercase tracking-wide text-fg-subtle">{label}</p>
-      <p className="mt-1 text-lg font-semibold capitalize text-fg">{value}</p>
+    <div
+      className={`flex-1 rounded-xl border border-white/10 bg-bg/70 p-2.5 text-center backdrop-blur-md ${className ?? ''}`}
+    >
+      <p className="text-[10px] uppercase tracking-wide text-fg-subtle">{label}</p>
+      <p className="mt-0.5 text-base font-semibold capitalize text-fg">{value}</p>
     </div>
   )
 }
