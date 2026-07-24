@@ -128,7 +128,7 @@ export function WorkoutSession({ exercise }: WorkoutSessionProps) {
   } else {
     const target = exercise.mode === 'rep' ? `Target: ${exercise.targetReps} reps` : `Target: ${exercise.targetHoldSeconds}s`
     content = (
-      <div className="mx-auto flex h-dvh max-w-2xl flex-col gap-3 p-3">
+      <div className="mx-auto flex h-dvh max-w-2xl flex-col gap-3 p-3 lg:max-w-5xl lg:p-6">
         <div className="flex items-center justify-between px-1">
           <h1 className="text-lg font-semibold text-fg">{exercise.name}</h1>
           <span className="text-sm text-fg-muted">
@@ -138,7 +138,7 @@ export function WorkoutSession({ exercise }: WorkoutSessionProps) {
 
         <PoseDetector key={setIndex} exercise={exercise} onMetricUpdate={handleMetricUpdate} />
 
-        <Button variant="secondary" onClick={handleEndSetEarly}>
+        <Button variant="secondary" onClick={handleEndSetEarly} className="lg:mx-auto lg:w-full lg:max-w-md">
           End set
         </Button>
       </div>

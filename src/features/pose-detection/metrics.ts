@@ -6,7 +6,12 @@ export interface RawLandmark {
   visibility?: number
 }
 
-const MIN_VISIBILITY = 0.5
+// Landmark visibility gating alone can't distinguish "confidently wrong"
+// extrapolated points from genuinely-visible ones — MediaPipe reports both
+// as fairly confident. The real fix for noise-driven false reps is the
+// RepEngine's arm/calibration streak; keep this threshold modest so a leg
+// that's genuinely (if partially) visible mid-rep doesn't get rejected too.
+const MIN_VISIBILITY = 0.55
 
 function pointsFor(
   landmarks: RawLandmark[],

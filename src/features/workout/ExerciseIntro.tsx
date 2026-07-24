@@ -56,6 +56,18 @@ export function ExerciseIntro({ exercise, onStart }: ExerciseIntroProps) {
         </Card>
       </motion.div>
 
+      {exercise.mode === 'rep' && (
+        <motion.div variants={item}>
+          <Card className="flex gap-2 border-accent/25 bg-accent-muted text-sm text-fg-muted">
+            <span className="text-accent">📷</span>
+            <span>
+              Stand back far enough that your whole body — head to feet — fits in frame. Rep counting
+              tracks your knee angle and loses accuracy if your ankles get cropped out.
+            </span>
+          </Card>
+        </motion.div>
+      )}
+
       <motion.div
         initial={{ opacity: 0, y: 14, scale: 0.96 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}

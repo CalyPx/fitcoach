@@ -36,50 +36,54 @@ export function DashboardPage() {
   const proteinProgress = proteinTarget > 0 ? proteinToday / proteinTarget : 0
 
   return (
-    <div className="mx-auto flex min-h-dvh max-w-md flex-col gap-6 p-6">
+    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col gap-6 p-6 md:gap-8 md:p-10">
       <motion.header initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
-        <h1 className="text-2xl font-semibold text-fg">Dashboard</h1>
+        <h1 className="text-2xl font-semibold text-fg md:text-3xl">Dashboard</h1>
         <p className="mt-1 text-fg-muted">This week</p>
       </motion.header>
 
-      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.05 }}>
-        <Card className="flex flex-col gap-4">
-          <p className="text-xs uppercase tracking-wide text-fg-subtle">Workout consistency</p>
-          <WeekGrid dayKeys={dayKeys} sessions={sessions} today={today} />
-        </Card>
-      </motion.div>
+      <div className="grid gap-6 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] md:items-start md:gap-8">
+        <div className="flex flex-col gap-6">
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.05 }}>
+            <Card className="flex flex-col gap-4">
+              <p className="text-xs uppercase tracking-wide text-fg-subtle">Workout consistency</p>
+              <WeekGrid dayKeys={dayKeys} sessions={sessions} today={today} />
+            </Card>
+          </motion.div>
 
-      <motion.div
-        className="grid grid-cols-2 gap-3"
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.1 }}
-      >
-        <StatTile label="Sessions this week" value={String(weekSessionCount)} />
-        <StatTile label="Reps this week" value={String(weekReps)} />
-      </motion.div>
+          <motion.div
+            className="grid grid-cols-2 gap-3"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+          >
+            <StatTile label="Sessions this week" value={String(weekSessionCount)} />
+            <StatTile label="Reps this week" value={String(weekReps)} />
+          </motion.div>
+        </div>
 
-      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.15 }}>
-        <Link to="/meals">
-          <Card interactive className="flex flex-col gap-4">
-            <div className="flex items-center justify-between">
-              <p className="text-xs uppercase tracking-wide text-fg-subtle">Protein today</p>
-              <span className="text-sm text-fg-muted">Target: {proteinTarget}g</span>
-            </div>
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.15 }}>
+          <Link to="/meals">
+            <Card interactive className="flex flex-col gap-4">
+              <div className="flex items-center justify-between">
+                <p className="text-xs uppercase tracking-wide text-fg-subtle">Protein today</p>
+                <span className="text-sm text-fg-muted">Target: {proteinTarget}g</span>
+              </div>
 
-            <div className="flex items-center gap-4">
-              <ProgressRing
-                progress={proteinProgress}
-                size={72}
-                strokeWidth={7}
-                label={`${Math.round(proteinToday)}g`}
-                tone="secondary"
-              />
-              <p className="flex-1 text-sm text-fg-muted">Log meals in the Meals tab to track this →</p>
-            </div>
-          </Card>
-        </Link>
-      </motion.div>
+              <div className="flex items-center gap-4">
+                <ProgressRing
+                  progress={proteinProgress}
+                  size={72}
+                  strokeWidth={7}
+                  label={`${Math.round(proteinToday)}g`}
+                  tone="secondary"
+                />
+                <p className="flex-1 text-sm text-fg-muted">Log meals in the Meals tab to track this →</p>
+              </div>
+            </Card>
+          </Link>
+        </motion.div>
+      </div>
     </div>
   )
 }

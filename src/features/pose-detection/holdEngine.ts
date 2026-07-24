@@ -9,6 +9,9 @@ export interface HoldEngineState {
 /** Consecutive frames a form change must hold before feedback switches — avoids flickering between messages. */
 const DEBOUNCE_FRAMES = 5
 
+/** Exponential smoothing factor for the raw form angle — see the matching constant in repEngine.ts for why. */
+const SMOOTHING_ALPHA = 0.35
+
 /**
  * Generic hold-timer for time-based exercises (plank, and anything else
  * scored by "how long was correct form maintained" rather than reps).
@@ -20,6 +23,7 @@ export class HoldEngine {
   private feedbackKey: HoldFeedbackKey = 'idle'
   private candidateKey: HoldFeedbackKey | null = null
   private candidateStreak = 0
+  private smoothedAngle: number | null = null
   private goodFormMinAngle: number
 
   constructor(goodFormMinAngle: number) {
@@ -27,19 +31,26 @@ export class HoldEngine {
   }
 
   /**
-   * @param angle form angle this frame (null if not visible)
+   * @param rawAngle form angle this frame (null if not visible)
    * @param signedDeviation positive = hinge point below the reference line (sagging),
    *   negative = above it (piked) — only used to pick which "bad form" message to show
    * @param dtSeconds real time elapsed since the last update() call
    */
-  update(angle: number | null, signedDeviation: number | null, dtSeconds: number): HoldEngineState {
-    if (angle === null) {
+  update(rawAngle: number | null, signedDeviation: number | null, dtSeconds: number): HoldEngineState {
+    if (rawAngle === null) {
+      this.smoothedAngle = null
       return {
         holding: false,
         elapsedGoodSeconds: this.elapsedGoodSeconds,
         feedbackKey: this.feedbackKey,
       }
     }
+
+    this.smoothedAngle =
+      this.smoothedAngle === null
+        ? rawAngle
+        : this.smoothedAngle + SMOOTHING_ALPHA * (rawAngle - this.smoothedAngle)
+    const angle = this.smoothedAngle
 
     const good = angle >= this.goodFormMinAngle
     let candidate: HoldFeedbackKey
@@ -80,5 +91,6 @@ export class HoldEngine {
     this.feedbackKey = 'idle'
     this.candidateKey = null
     this.candidateStreak = 0
+    this.smoothedAngle = null
   }
 }

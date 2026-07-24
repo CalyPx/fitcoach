@@ -11,7 +11,14 @@ import { Spinner } from '@/components/ui/Spinner'
 type CameraStatus = 'idle' | 'requesting' | 'ready' | 'denied' | 'error'
 
 export type MetricUpdate =
-  | { mode: 'rep'; reps: number; phase: RepPhase; angle: number | null; repJustCompleted: boolean }
+  | {
+      mode: 'rep'
+      reps: number
+      phase: RepPhase
+      angle: number | null
+      repJustCompleted: boolean
+      calibrating: boolean
+    }
   | { mode: 'hold'; elapsedGoodSeconds: number; holding: boolean; angle: number | null }
 
 interface PoseDetectorProps {
@@ -40,6 +47,7 @@ export function PoseDetector({ exercise, onMetricUpdate }: PoseDetectorProps) {
   const [elapsedGoodSeconds, setElapsedGoodSeconds] = useState(0)
   const [holding, setHolding] = useState(false)
   const [feedback, setFeedback] = useState('')
+  const [calibrating, setCalibrating] = useState(true)
   const [angle, setAngle] = useState<number | null>(null)
   const [fps, setFps] = useState(0)
   const [poseVisible, setPoseVisible] = useState(false)
@@ -143,13 +151,19 @@ export function PoseDetector({ exercise, onMetricUpdate }: PoseDetectorProps) {
           const next = repEngineRef.current!.update(primaryAngle)
           setReps(next.reps)
           setPhase(next.phase)
-          setFeedback(feedbackPickerRef.current.pick(next.feedbackKey, exercise.feedback))
+          setCalibrating(next.calibrating)
+          setFeedback(
+            next.calibrating
+              ? 'Hold still for a second — calibrating…'
+              : feedbackPickerRef.current.pick(next.feedbackKey, exercise.feedback),
+          )
           onMetricUpdateRef.current?.({
             mode: 'rep',
             reps: next.reps,
             phase: next.phase,
             angle: primaryAngle,
             repJustCompleted: next.repJustCompleted,
+            calibrating: next.calibrating,
           })
         } else {
           const formAngle = averageAngle(landmarks, exercise.form.left, exercise.form.right, w, h)
@@ -234,7 +248,7 @@ export function PoseDetector({ exercise, onMetricUpdate }: PoseDetectorProps) {
         {exercise.mode === 'rep' ? (
           <>
             <HudChip label="Reps" value={String(reps)} />
-            <HudChip label="Phase" value={phase} />
+            <HudChip label="Phase" value={calibrating ? 'calibrating' : phase} />
             <HudChip label={exercise.primaryAngle.label} value={angle ? `${Math.round(angle)}°` : '—'} />
           </>
         ) : (
