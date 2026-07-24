@@ -76,7 +76,12 @@ export function OnboardingPage() {
   }
 
   return (
-    <div className="mx-auto flex min-h-dvh max-w-md flex-col gap-10 p-6">
+    <div className="relative mx-auto flex min-h-dvh max-w-md flex-col gap-10 overflow-hidden p-6">
+      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute -left-1/3 -top-1/4 h-[60vh] w-[60vh] rounded-full bg-accent/[0.12] blur-[110px]" />
+        <div className="absolute -bottom-1/3 -right-1/3 h-[65vh] w-[65vh] rounded-full bg-accent-secondary/[0.10] blur-[110px]" />
+      </div>
+
       <ProgressDots total={STEP_COUNT} current={step} />
 
       <div className="relative flex-1 overflow-hidden">

@@ -8,6 +8,8 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant
   size?: Size
   children: ReactNode
+  /** Pulsing accent glow for the one obvious next action on a screen — use sparingly. */
+  glow?: boolean
 }
 
 const variantStyles: Record<Variant, string> = {
@@ -26,6 +28,7 @@ const sizeStyles: Record<Size, string> = {
 export function Button({
   variant = 'primary',
   size = 'md',
+  glow = false,
   className,
   children,
   ...props
@@ -36,6 +39,7 @@ export function Button({
         'inline-flex items-center justify-center gap-2 rounded-full font-medium transition-colors duration-150 ease-out disabled:opacity-40 disabled:pointer-events-none',
         variantStyles[variant],
         sizeStyles[size],
+        glow && variant === 'primary' && 'btn-glow',
         className,
       )}
       {...props}

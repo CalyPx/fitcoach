@@ -78,7 +78,13 @@ export function DashboardPage() {
           </div>
 
           <div className="flex items-center gap-4">
-            <ProgressRing progress={proteinProgress} size={72} strokeWidth={7} label={`${proteinToday}g`} />
+            <ProgressRing
+              progress={proteinProgress}
+              size={72}
+              strokeWidth={7}
+              label={`${proteinToday}g`}
+              tone="secondary"
+            />
             <div className="flex flex-1 items-center gap-2">
               <input
                 type="number"
@@ -135,16 +141,16 @@ function WeekGrid({
         const date = parseDateKey(key)
         return (
           <div key={key} className="flex flex-1 flex-col items-center gap-2">
-            <div className="flex h-20 w-full items-end">
+            <div className="flex h-28 w-full items-end">
               <motion.div
                 className={cn(
-                  'w-full rounded-full',
-                  count > 0 ? 'bg-accent' : 'bg-bg-subtle',
+                  'w-full rounded-t-xl',
+                  count > 0 ? 'bg-gradient-to-t from-accent to-accent/10' : 'bg-bg-subtle',
                   isToday && 'ring-1 ring-accent ring-offset-2 ring-offset-bg-elevated',
                 )}
-                initial={{ height: 8 }}
+                initial={{ height: 6 }}
                 animate={{ height: `${heightPct}%` }}
-                transition={{ duration: 0.5, ease: 'easeOut', delay: i * 0.04 }}
+                transition={{ type: 'spring', stiffness: 140, damping: 16, delay: i * 0.05 }}
               />
             </div>
             <span className={cn('text-xs', isToday ? 'font-semibold text-fg' : 'text-fg-subtle')}>
@@ -161,7 +167,7 @@ function StatTile({ label, value }: { label: string; value: string }) {
   return (
     <Card className="flex flex-col items-center text-center">
       <p className="text-xs uppercase tracking-wide text-fg-subtle">{label}</p>
-      <p className="mt-1 text-2xl font-semibold text-fg">{value}</p>
+      <p className="mt-1 font-display text-display-md text-fg">{value}</p>
     </Card>
   )
 }

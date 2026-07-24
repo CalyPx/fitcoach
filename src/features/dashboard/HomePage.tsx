@@ -65,25 +65,26 @@ export function HomePage() {
           <p className="mt-1 text-fg-muted">{dateLabel}</p>
         </div>
         {streak > 0 && (
-          <div className="flex items-center gap-1.5 rounded-full border border-border bg-bg-elevated px-3 py-1.5 text-sm text-fg">
+          <div className="flex items-center gap-1.5 rounded-full border border-accent-secondary/25 bg-accent-secondary-muted px-3 py-1.5 text-sm text-accent-secondary">
             <span>🔥</span>
-            <span className="font-medium">{streak}</span>
+            <span className="font-display text-display-sm">{streak}</span>
           </div>
         )}
       </motion.header>
 
       <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.05, ease: 'easeOut' }}
+        initial={{ opacity: 0, y: 16, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.5, delay: 0.05, ease: 'easeOut' }}
       >
-        <Card className="flex flex-col items-center gap-4 text-center">
+        <Card className="flex flex-col items-center gap-5 py-8 text-center">
           <p className="text-xs uppercase tracking-wide text-fg-subtle">Today's progress</p>
           <ProgressRing
             progress={ringProgress}
-            size={132}
-            strokeWidth={10}
+            size={196}
+            strokeWidth={14}
             label={`${setsToday}/${dailyTargetSets}`}
+            hero
           />
           <p className="text-sm text-fg-muted">sets completed · {repsToday} reps today</p>
         </Card>
